@@ -40,8 +40,11 @@ df.info(buf=buffer)
 # Retrieve the content from the buffer
 summary_info = buffer.getvalue()
 # Display Information
-st.markdown('#### Information')
-st.dataframe(df.info())
+
+if st.button('#### Information'):
+    st.text(summary_info)
+
+
 
 
 # We could display the output series as a dataframe
@@ -49,12 +52,12 @@ st.markdown("#### Null Values")
 nulls =df.isna().sum()
 st.dataframe(nulls)
 # Create a string buffer to capture the content
-buffer = StringIO()
-# Write the content into the buffer...use to_string
-df.isna().sum().to_string(buffer)
-# Retrieve the content from the buffer
-null_values = buffer.getvalue()
-# Use Streamlit to display the info
-st.markdown("#### Null Values as String")
-st.text(null_values)
+# buffer = StringIO()
+# # Write the content into the buffer...use to_string
+# df.isna().sum().to_string(buffer)
+# # Retrieve the content from the buffer
+# null_values = buffer.getvalue()
+# # # Use Streamlit to display the info
+# # st.markdown("#### Null Values as String")
+# # st.text(null_values)
 
