@@ -7,6 +7,7 @@ import seaborn as sns
 from io import StringIO
 import plotly.express as px
 import plotly.io as pio
+
 pio.templates.default='seaborn'
 
 # Add title Part 1A and 1B
