@@ -9,6 +9,53 @@ import plotly.express as px
 import plotly.io as pio
 pio.templates.default='seaborn'
 
+# Add title Part 1A and 1B
+st.title("Product Sales Project")
+
+# Define the columns you want to use 
+columns_to_use = ['Item_Weight', 'Item_Fat_Content', 'Item_Visibility', 'Item_Type', 'Item_MRP', 'Outlet_Size', 'Outlet_Location_Type', 'Outlet_Type', 'Item_Outlet_Sales']
+
+# Function for loading data
+# Adding data caching
+@st.cache_data
+def load_data():
+    fpath =  "Data/item_fat_content.csv"
+    df = pd.read_csv(fpath)
+    df = df[columns_to_use]
+    return df
+
+# load the data 
+df = load_data()
+
+# Display an interactive dataframe
+st.header("Product Sales Data")
+st.dataframe(df, width=800)
+
+# Display descriptive statistics
+st.markdown('#### Descriptive Statistics')
+st.dataframe(df.describe().round(2))
+
+from io import StringIO
+# Create a string buffer to capture the content
+buffer = StringIO()
+# Write the info into the buffer
+df.info(buf=buffer)
+# Retrieve the content from the buffer
+summary_info = buffer.getvalue()
+# Display Information
+
+if st.button('#### Information'):
+    st.text(summary_info)
+
+# We could display the output series as a dataframe
+st.markdown("#### Null Values")
+nulls =df.isna().sum()
+st.dataframe(nulls)
+
+##########################################################################################################################
+# Solution to Plotly Practice Assignment
+# Add a selectbox for all possible features
+column = st.selectbox(label="Select a column", options=columns_to_use)
 # Use plotly for explore functions
 def plotly_explore_numeric(df, x):
     fig = px.histogram(df,x=x,marginal='box',title=f'Distribution of {x}', 
@@ -29,43 +76,21 @@ st.markdown("#### Displaying appropriate Plotly plot based on selected column")
 # Display appropriate eda plots
 st.plotly_chart(fig)
 
-# Add title
-st.title("Project 1 Part 1B")
-
-# Define the columns you want to use 
-columns_to_use = ['Item_Weight', 'Item_Fat_Content', 'Item_Visibility', 'Item_Type', 'Item_MRP', 'Outlet_Size', 'Outlet_Location_Type', 'Outlet_Type', 'Item_Outlet_Sales']
-# Function for loading data
-# Adding data caching
-@st.cache_data
-def load_data():
-        fpath = "Data/item_fat_content.csv"
-    df = pd.read_csv(fpath)
-    df = df.set_index("PID")
-    df = df[columns_to_use]
-    return df
-
-# load the data 
-df = load_data()
-
-
-##########################################################################################################################
-# Solution to Plotly Practice Assignment
-
-st.markdown("#### Explore Features vs. Target Plots with Plotly")
+st.markdown("#### Explore Features vs. Item_Outlet_Sales Plots with Plotly")
 # Add a selectbox for all possible features (exclude SalePrice)
 # Copy list of columns
 features_to_use = columns_to_use[:]
 # Define target
-target = 'Item_Type'
+target = 'Item_Outlet_Sales'
 # Remove target from list of features
 features_to_use.remove(target)
 
 # Add a selectbox for all possible columns
-feature = st.selectbox(label="Select a feature to compare with Item_Type", options=features_to_use)
+feature = st.selectbox(label="Select a feature to compare with Item_Outlet_Sales", options=features_to_use)
 
 
 
-def plotly_numeric_vs_target(df, x, y='Item_Type', trendline='ols',add_hoverdata=True):
+def plotly_numeric_vs_target(df, x, y='Item_Outlet_Sales', trendline='ols',add_hoverdata=True):
     if add_hoverdata == True:
         hover_data = list(df.columns)
     else: 
@@ -81,7 +106,7 @@ def plotly_numeric_vs_target(df, x, y='Item_Type', trendline='ols',add_hoverdata
                       line=dict(dash='dash'))
     return pfig
 
-def plotly_categorical_vs_target(df, x, y='Item_Type', histfunc='avg', width=800,height=500):
+def plotly_categorical_vs_target(df, x, y='Item_Outlet_Sales', histfunc='avg', width=800,height=500):
     fig = px.histogram(df, x=x,y=y, color=x, width=width, height=height,
                        histfunc=histfunc, title=f'Compare {histfunc.title()} {y} by {x}')
     fig.update_layout(showlegend=False)
