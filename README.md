@@ -27,7 +27,7 @@ This project utilizes Streamlit, a popular open-source app framework in Python, 
 # Contact
 For any questions or inquiries, you can reach out to:
 
-      [Eric N. Valdez](https://www.linkedin.com/in/eric-n-valdez-94a9003/)
+[Eric N. Valdez](https://www.linkedin.com/in/eric-n-valdez-94a9003/)      
 
 Thank you for checking out this project!
 
